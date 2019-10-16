@@ -13,7 +13,7 @@ public interface IPlayer {
     public int getBank();
     public void addCard(ICard ICard);
     public boolean wantContinue();
-    public void splitHand();
+    public boolean splitHand();
     public boolean wantSplitHand();
     public int bet();
     public boolean wantBet();

@@ -56,6 +56,23 @@ public class BlackJack implements IBlackJack {
     }
     @Override
     public void game() {
+        newDeck();
+        userInput.numberOfPlayers();
+        player.getBank();
+        do{
+            player.bet();
+            dealer.addCard(deck.drawCard());
+            player.addCard(deck.drawCard());
+            dealer.addCard(deck.drawCard());
+            player.addCard(deck.drawCard());
+            player.wantSplitHand();
+            while(player.wannaNextCard()){
+
+            }
+
+
+
+        }while (player.wantContinue());
 
     }
 

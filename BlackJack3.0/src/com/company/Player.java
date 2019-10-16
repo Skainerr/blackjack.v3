@@ -25,7 +25,6 @@ public class Player implements IPlayer {
             return handTwo;
         }
     }
-
     /**
      * Add money into players bank
      * @param money money to add
@@ -51,12 +50,14 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public void splitHand() {
-        if(acesOnHand() == 2 || splittable()){
+    public boolean splitHand() {
+        if((acesOnHand() == 2 || splittable())
+        && playerBank >= bet()){
             if(wantSplitHand()){
                 handTwo.add(handOne.remove(0));
             }
         }
+        return false;
     }
     private boolean splittable(){
         return handOne.get(0).getValue() == handOne.get(1).getValue() && handOne.get(0).getValue() < 10;
