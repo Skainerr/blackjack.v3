@@ -9,6 +9,7 @@ public class BlackJack implements IBlackJack {
     private Player player = new Player();
     private Dealer dealer = new Dealer();
     private UserInput userInput = new UserInput();
+    private int originalBank;
 
     @Override
     public List<IPlayer> winner() {
@@ -29,10 +30,14 @@ public class BlackJack implements IBlackJack {
             }
         }return new ArrayList<>();
     }
+    public void moneyInBank(IPlayer iPlayer){
+        originalBank = userInput.getInitialBank();
+        player.getBank();
+    }
 
     @Override
     public void setPricePool(IPlayer IPlayer) {
-        int pricePool = userInput.getBet() *2;
+        int pricePool = userInput.getBet() * 2;
         int money = pricePool + player.getBank();
         player.addToBank(money);
     }
@@ -64,7 +69,7 @@ public class BlackJack implements IBlackJack {
     public void game() {
         newDeck();
         userInput.numberOfPlayers();
-        player.getBank();
+        userInput.getInitialBank();
         do{
             player.bet();
             dealer.addCard(deck.drawCard());
@@ -75,7 +80,7 @@ public class BlackJack implements IBlackJack {
 
             }
 
-            while(player.wannaNextCard() && player.getValueOfHand() < 21){
+            while(player.wannaNextCard()){
                 player.addCard(deck.drawCard());
 
             }

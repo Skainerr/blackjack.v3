@@ -37,7 +37,6 @@ public class Player implements IPlayer {
 
     @Override
     public int getBank() {
-        playerBank = userInput.getBank();
         return playerBank;
     }
 

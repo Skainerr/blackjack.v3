@@ -64,7 +64,7 @@ public class UserInput implements IUserInput {
     }
 
     @Override
-    public int getBank() {
+    public int getInitialBank() {
         System.out.println("How much money you want to put in?: ");
         bank = scanner.nextInt();
         return bank;

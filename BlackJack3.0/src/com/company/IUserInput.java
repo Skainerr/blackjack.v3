@@ -7,5 +7,5 @@ public interface IUserInput {
     public boolean wantContinue();
     public boolean wantSplit();
     public int numberOfPlayers();
-    public int getBank();
+    public int getInitialBank();
 }
