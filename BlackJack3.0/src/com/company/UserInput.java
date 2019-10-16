@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class UserInput implements IUserInput {
     private Scanner scanner = new Scanner(System.in);
     private int numOfPlayers;
-    private int bank = 0;
+    private int bank;
     private int bet;
     @Override
     public boolean wantNextCard() {

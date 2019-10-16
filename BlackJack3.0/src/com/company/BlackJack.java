@@ -12,16 +12,22 @@ public class BlackJack implements IBlackJack {
 
     @Override
     public List<IPlayer> winner() {
-        for(IPlayer p : players) {
+        List<IPlayer> listOfWinners = new ArrayList<>();
+        for (IPlayer p : players) {
             if ((p.getValueOfHand() == 21 && dealer.getValueOfHand() != 21)
                     || (p.getValueOfHand() < 21 && dealer.getValueOfHand() < p.getValueOfHand())
                     || (p.getValueOfHand() < 21 && dealer.getValueOfHand() > 21)) {
-                List<IPlayer> listOfWinners = new ArrayList<>();
                 listOfWinners.add(player);
-                return listOfWinners;
+                p.changeActiveHand();
+                if (player.getValueOfHand() > 0) {
+                    if ((p.getValueOfHand() == 21 && dealer.getValueOfHand() != 21)
+                            || (p.getValueOfHand() < 21 && dealer.getValueOfHand() < p.getValueOfHand())
+                            || (p.getValueOfHand() < 21 && dealer.getValueOfHand() > 21)) {
+                        listOfWinners.add(player);
+                    }
+                }p.changeActiveHand();
             }
-        }
-        return new ArrayList<>();
+        }return new ArrayList<>();
     }
 
     @Override
@@ -65,8 +71,12 @@ public class BlackJack implements IBlackJack {
             player.addCard(deck.drawCard());
             dealer.addCard(deck.drawCard());
             player.addCard(deck.drawCard());
-            player.wantSplitHand();
-            while(player.wannaNextCard()){
+            if(player.splitHand()){
+
+            }
+
+            while(player.wannaNextCard() && player.getValueOfHand() < 21){
+                player.addCard(deck.drawCard());
 
             }
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Player implements IPlayer {
     private int playerBank;
+    private int bet;
     private UserInput userInput = new UserInput();
 
     //private List<List<ICard>> hand = new ArrayList<>();
@@ -36,6 +37,7 @@ public class Player implements IPlayer {
 
     @Override
     public int getBank() {
+        playerBank = userInput.getBank();
         return playerBank;
     }
 
@@ -55,6 +57,7 @@ public class Player implements IPlayer {
         && playerBank >= bet()){
             if(wantSplitHand()){
                 handTwo.add(handOne.remove(0));
+
             }
         }
         return false;
@@ -80,7 +83,9 @@ public class Player implements IPlayer {
 
     @Override
     public int bet() {
-        return userInput.getBet();
+        bet = userInput.getBet();
+        playerBank = playerBank - bet;
+        return bet;
     }
 
     @Override
