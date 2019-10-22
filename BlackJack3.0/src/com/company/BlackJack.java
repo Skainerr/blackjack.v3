@@ -32,7 +32,7 @@ public class BlackJack implements IBlackJack {
     }
     public void moneyInBank(IPlayer iPlayer){
         originalBank = userInput.getInitialBank();
-        player.getBank();
+        player.addToBank(originalBank);
     }
 
     @Override
@@ -69,28 +69,48 @@ public class BlackJack implements IBlackJack {
     public void game() {
         newDeck();
         userInput.numberOfPlayers();
-        userInput.getInitialBank();
+        moneyInBank();
         do{
             player.bet();
             dealer.addCard(deck.drawCard());
             player.addCard(deck.drawCard());
             dealer.addCard(deck.drawCard());
             player.addCard(deck.drawCard());
+            showCardsToPlayer();
             if(player.splitHand()){
-
-            }
-
-            while(player.wannaNextCard()){
+                player.getSplitBet();
                 player.addCard(deck.drawCard());
-
+                while(addNewCardIfWanted(){
+                    showCardsToPlayer();
+                }
+                player.changeActiveHand();
+                player.addCard(deck.drawCard());
+                while(addNewCardIfWanted()){
+                    showCardsToPlayer();
+                }
+                player.changeActiveHand();
             }
+            addNewCardIfWanted();
+            while(dealer.wannaNextCard()){
+                dealer.addCard();
+            }
+            System.out.println(dealer.getValueOfHand());
+            winner();
+            for(IPlayer p : winner()){
+                p.addToBank(setPricePool());
+            }
+            System.out.println("Congrats here are Players who have won: " + winner() + ".");
+            System.out.println("Here are your bank accounts: " + player.getBank());
 
+            if(enoughCards()){
+            }else newDeck();
 
+            if(enoughMoney()){
+            }else break;
 
         }while (player.wantContinue());
 
     }
-
     @Override
     public boolean enoughMoney(IPlayer IPlayer) {
         if(player.getBank() == 0){
