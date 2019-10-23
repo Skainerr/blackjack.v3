@@ -140,7 +140,7 @@ public class BlackJack implements IBlackJack {
     @Override
     public void showCardsToPlayer(IPlayer iPlayer) {
         for(ICard card : player.getHand()){
-            System.out.println(card.toString());
+            System.out.print(card.toString());
         }
     }
 }
