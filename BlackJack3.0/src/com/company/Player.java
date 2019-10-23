@@ -18,7 +18,12 @@ public class Player implements IPlayer {
     public void changeActiveHand(){
         if(activeHand == 0){
             activeHand = 1;
-        }
+        }else {
+            activeHand = 0;}
+    }
+    public void eraseHands(){
+        handOne.clear();
+        handTwo.clear();
     }
     private List<ICard> getActiveHand(){
         if(activeHand == 0){
@@ -86,6 +91,9 @@ public class Player implements IPlayer {
         playerBank = playerBank - bet;
         return bet;
     }
+    public int getBet(){
+        return bet;
+    }
     public int getSplitBet(){
         splitBet = bet;
         return splitBet;
@@ -109,6 +117,8 @@ public class Player implements IPlayer {
                 }
             }
         }
+
+
         return valueOfHand;
     }
     @Override

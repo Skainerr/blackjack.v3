@@ -9,7 +9,6 @@ public class BlackJack implements IBlackJack {
     private Player player = new Player();
     private Dealer dealer = new Dealer();
     private UserInput userInput = new UserInput();
-    private int originalBank;
 
     @Override
     public List<IPlayer> winner() {
@@ -19,26 +18,30 @@ public class BlackJack implements IBlackJack {
                     || (p.getValueOfHand() < 21 && dealer.getValueOfHand() < p.getValueOfHand())
                     || (p.getValueOfHand() < 21 && dealer.getValueOfHand() > 21)) {
                 listOfWinners.add(player);
+
                 p.changeActiveHand();
+
                 if (player.getValueOfHand() > 0) {
                     if ((p.getValueOfHand() == 21 && dealer.getValueOfHand() != 21)
                             || (p.getValueOfHand() < 21 && dealer.getValueOfHand() < p.getValueOfHand())
                             || (p.getValueOfHand() < 21 && dealer.getValueOfHand() > 21)) {
                         listOfWinners.add(player);
                     }
-                }p.changeActiveHand();
+                }
+
+                p.changeActiveHand();
             }
-        }return new ArrayList<>();
+        }
+        return listOfWinners;
     }
-    public void moneyInBank(IPlayer iPlayer){
-        originalBank = userInput.getInitialBank();
+    public void moneyInBank(){
+        int originalBank = userInput.getInitialBank();
         player.addToBank(originalBank);
     }
 
     @Override
     public void setPricePool(IPlayer IPlayer) {
-        int pricePool = userInput.getBet() * 2;
-        int money = pricePool + player.getBank();
+        int money = player.getBet() * 2;
         player.addToBank(money);
     }
 
@@ -50,6 +53,7 @@ public class BlackJack implements IBlackJack {
         while (player.getValueOfHand() < 21){
             if(player.wannaNextCard()){
                 player.addCard(deck.drawCard());
+                showCardsToPlayer(player);
             } else {
                 break;
             }
@@ -68,7 +72,9 @@ public class BlackJack implements IBlackJack {
     @Override
     public void game() {
         newDeck();
+
         userInput.numberOfPlayers();
+        players.add(player);
         moneyInBank();
         do{
             player.bet();
@@ -76,39 +82,44 @@ public class BlackJack implements IBlackJack {
             player.addCard(deck.drawCard());
             dealer.addCard(deck.drawCard());
             player.addCard(deck.drawCard());
-            showCardsToPlayer();
+            showCardsToPlayer(player);
             if(player.splitHand()){
                 player.getSplitBet();
                 player.addCard(deck.drawCard());
-                while(addNewCardIfWanted(){
-                    showCardsToPlayer();
-                }
+                addNewCardIfWanted(player);
                 player.changeActiveHand();
                 player.addCard(deck.drawCard());
-                while(addNewCardIfWanted()){
-                    showCardsToPlayer();
-                }
+                addNewCardIfWanted(player);
                 player.changeActiveHand();
+            }else {
+                    addNewCardIfWanted(player);
             }
-            addNewCardIfWanted();
             while(dealer.wannaNextCard()){
-                dealer.addCard();
+                dealer.addCard(deck.drawCard());
             }
-            System.out.println(dealer.getValueOfHand());
-            winner();
-            for(IPlayer p : winner()){
-                p.addToBank(setPricePool());
+            System.out.println("Dealer has " + dealer.getValueOfHand() + " on hand.");
+            List<IPlayer> listOfWinners = winner();
+            for(IPlayer p : listOfWinners){
+                setPricePool(p);
             }
-            System.out.println("Congrats here are Players who have won: " + winner() + ".");
+            System.out.println();
+            System.out.println("Congrats here are Players who have won: " + listOfWinners + ".");
             System.out.println("Here are your bank accounts: " + player.getBank());
 
-            if(enoughCards()){
-            }else newDeck();
 
-            if(enoughMoney()){
-            }else break;
+            if(!enoughCards(deck)){
+            newDeck();
+            }
 
+            if(!enoughMoney(player)){
+
+                break;
+            }
+            player.eraseHands();
+            dealer.eraseHands();
         }while (player.wantContinue());
+        System.out.println("thx for playing.");
+
 
     }
     @Override

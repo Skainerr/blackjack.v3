@@ -3,11 +3,7 @@ package test;
 import com.company.Card;
 import com.company.ICard;
 import com.company.Player;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -16,18 +12,19 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 class PlayerTest {
     private static Player player;
     private static final InputStream DEFAULT_STDIN = System.in;
 
-    @After
-    public void rollbackChangesToStdin() {
+    @AfterAll
+    public static void rollbackChangesToStdin() {
         System.setIn(DEFAULT_STDIN);
     }
 
-    @BeforeAll
-    static void generatePlayer(){
+    @BeforeEach
+    public void generatePlayer(){
         player = new Player();
     }
 
@@ -59,24 +56,37 @@ class PlayerTest {
         for(ICard card : list){
             player.addCard(card);
         }
-        Assert.assertThat(list, is(player.getHand()));
+
+        assertThat(list, is(player.getHand()));
         player.changeActiveHand();
-        Assert.assertThat(new ArrayList<>(), is(player.getHand()));
+        assertThat(new ArrayList<>(), is(player.getHand()));
 
         for(ICard card : list){
             player.addCard(card);
         }
-        Assert.assertThat(list, is(player.getHand()));
+        assertThat(list, is(player.getHand()));
     }
 
     @Test
     void splitHand() {
-        Assert.assertFalse(player.splitHand());
+        //        Assertions.assertFalse(player.splitHand());
+        System.setIn(new ByteArrayInputStream("70".getBytes()));
+        player = new Player();
+        player.addToBank(333333);
+        player.addCard(new Card(Card.Rank.ACE, Card.Suit.CLUBS));
+        player.addCard(new Card(Card.Rank.ACE, Card.Suit.DIAMOND));
+
+        System.setIn(new ByteArrayInputStream("\nY\n".getBytes()));
+
+        Assertions.assertTrue(player.splitHand());
+
+        player.eraseHands();
+
 
         player.addCard(new Card(Card.Rank.ACE, Card.Suit.CLUBS));
-        player.addCard(new Card(Card.Rank.ACE, Card.Suit.CLUBS));
+        player.addCard(new Card(Card.Rank.ACE, Card.Suit.DIAMOND));
 
-        Assert.assertTrue(player.splitHand());
+        player.splitHand();
     }
 
     @Test
@@ -89,7 +99,7 @@ class PlayerTest {
 
         player.bet();
 
-        Assert.assertEquals(30, player.getBank());
+        Assertions.assertEquals(30, player.getBank());
     }
 
     @Test
@@ -102,19 +112,19 @@ class PlayerTest {
 
     @Test
     void getValueOfHand() {
-        Assert.assertEquals(0, player.getValueOfHand());
+        Assertions.assertEquals(0, player.getValueOfHand());
 
         player.addCard(new Card(Card.Rank.ACE, Card.Suit.CLUBS));
         player.addCard(new Card(Card.Rank.ACE, Card.Suit.CLUBS));
 
-        Assert.assertEquals(12, player.getValueOfHand());
+        Assertions.assertEquals(12, player.getValueOfHand());
 
         player = new Player();
 
         player.addCard(new Card(Card.Rank.ACE, Card.Suit.CLUBS));
         player.addCard(new Card(Card.Rank.JACK, Card.Suit.CLUBS));
 
-        Assert.assertEquals(21, player.getValueOfHand());
+        Assertions.assertEquals(21, player.getValueOfHand());
     }
 
 }
