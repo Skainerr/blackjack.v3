@@ -88,6 +88,10 @@ public class Player implements IPlayer {
     @Override
     public int bet() {
         bet = userInput.getBet();
+        while(bet > playerBank){
+            System.out.println("Sorry you are don't have enough money, please correct your bet");
+            bet = userInput.getBet();
+        }
         playerBank = playerBank - bet;
         return bet;
     }

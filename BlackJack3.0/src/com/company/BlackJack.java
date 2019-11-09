@@ -77,12 +77,19 @@ public class BlackJack implements IBlackJack {
         players.add(player);
         moneyInBank();
         do{
-            player.bet();
+            for(IPlayer player : players) {
+                player.bet();
+            }
+            for(IPlayer player : players) {
+                player.addCard(deck.drawCard());
+            }
             dealer.addCard(deck.drawCard());
-            player.addCard(deck.drawCard());
+            for(IPlayer player : players) {
+                player.addCard(deck.drawCard());
+            }
             dealer.addCard(deck.drawCard());
-            player.addCard(deck.drawCard());
             showCardsToPlayer(player);
+            System.out.println("You have " + player.getValueOfHand() + " on hand");
             if(player.splitHand()){
                 player.getSplitBet();
                 player.addCard(deck.drawCard());
@@ -104,7 +111,7 @@ public class BlackJack implements IBlackJack {
             }
             System.out.println();
             System.out.println("Congrats here are Players who have won: " + listOfWinners + ".");
-            System.out.println("Here are your bank accounts: " + player.getBank());
+            System.out.println("Here is your bank accounts: " + player.getBank());
 
 
             if(!enoughCards(deck)){
