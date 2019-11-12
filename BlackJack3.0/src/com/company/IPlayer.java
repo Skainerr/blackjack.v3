@@ -15,11 +15,14 @@ public interface IPlayer {
     public boolean wantContinue();
     public boolean splitHand();
     public boolean wantSplitHand();
-    public int bet();
+    public int getBet();
     public boolean wantBet();
     public int getValueOfHand();
     //add getNextCard
     public boolean wannaNextCard();
     public List<ICard> getHand();
+    public int getSplitBet();
+    public int bet();
+    public void eraseHands();
 
 }

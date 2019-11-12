@@ -6,9 +6,11 @@ import java.util.List;
 public class BlackJack implements IBlackJack {
     private List<IPlayer> players = new ArrayList<>();
     private IDeck deck = new Deck();
-    private Player player = new Player();
     private Dealer dealer = new Dealer();
     private UserInput userInput = new UserInput();
+    private int numberOfPlayers = userInput.numberOfPlayers();
+    private List<IPlayer> playersWhoWantContinue = new ArrayList<>();
+
 
     @Override
     public List<IPlayer> winner() {
@@ -17,15 +19,15 @@ public class BlackJack implements IBlackJack {
             if ((p.getValueOfHand() == 21 && dealer.getValueOfHand() != 21)
                     || (p.getValueOfHand() < 21 && dealer.getValueOfHand() < p.getValueOfHand())
                     || (p.getValueOfHand() < 21 && dealer.getValueOfHand() > 21)) {
-                listOfWinners.add(player);
+                listOfWinners.add(p);
 
                 p.changeActiveHand();
 
-                if (player.getValueOfHand() > 0) {
+                if (p.getValueOfHand() > 0) {
                     if ((p.getValueOfHand() == 21 && dealer.getValueOfHand() != 21)
                             || (p.getValueOfHand() < 21 && dealer.getValueOfHand() < p.getValueOfHand())
                             || (p.getValueOfHand() < 21 && dealer.getValueOfHand() > 21)) {
-                        listOfWinners.add(player);
+                        listOfWinners.add(p);
                     }
                 }
 
@@ -34,13 +36,13 @@ public class BlackJack implements IBlackJack {
         }
         return listOfWinners;
     }
-    public void moneyInBank(){
+    public void moneyInBank(IPlayer player){
         int originalBank = userInput.getInitialBank();
         player.addToBank(originalBank);
     }
 
     @Override
-    public void setPricePool(IPlayer IPlayer) {
+    public void setPricePool(IPlayer player) {
         int money = player.getBet() * 2;
         player.addToBank(money);
     }
@@ -73,12 +75,17 @@ public class BlackJack implements IBlackJack {
     public void game() {
         newDeck();
 
-        userInput.numberOfPlayers();
-        players.add(player);
-        moneyInBank();
+        for(int i = 0; i < numberOfPlayers; i++){
+            IPlayer player = new Player();
+            players.add(player);
+        }
+        for(IPlayer player : players){
+            moneyInBank(player);
+        }
+
         do{
             for(IPlayer player : players) {
-                player.bet();
+                player.getBet();
             }
             for(IPlayer player : players) {
                 player.addCard(deck.drawCard());
@@ -88,18 +95,22 @@ public class BlackJack implements IBlackJack {
                 player.addCard(deck.drawCard());
             }
             dealer.addCard(deck.drawCard());
-            showCardsToPlayer(player);
-            System.out.println("You have " + player.getValueOfHand() + " on hand");
-            if(player.splitHand()){
-                player.getSplitBet();
-                player.addCard(deck.drawCard());
-                addNewCardIfWanted(player);
-                player.changeActiveHand();
-                player.addCard(deck.drawCard());
-                addNewCardIfWanted(player);
-                player.changeActiveHand();
-            }else {
+            for(IPlayer player : players){
+                showCardsToPlayer(player);
+            }
+            for(IPlayer player : players) {
+                System.out.println("You have " + player.getValueOfHand() + " on hand");
+                if (player.splitHand()) {
+                    player.getSplitBet();
+                    player.addCard(deck.drawCard());
                     addNewCardIfWanted(player);
+                    player.changeActiveHand();
+                    player.addCard(deck.drawCard());
+                    addNewCardIfWanted(player);
+                    player.changeActiveHand();
+                } else {
+                    addNewCardIfWanted(player);
+                }
             }
             while(dealer.wannaNextCard()){
                 dealer.addCard(deck.drawCard());
@@ -111,34 +122,52 @@ public class BlackJack implements IBlackJack {
             }
             System.out.println();
             System.out.println("Congrats here are Players who have won: " + listOfWinners + ".");
-            System.out.println("Here is your bank accounts: " + player.getBank());
+            for(IPlayer player : players){
+                System.out.println("Here is your bank accounts: " + player.getBank());
+            }
 
 
             if(!enoughCards(deck)){
             newDeck();
             }
+            for(IPlayer player : players) {
+                if (!enoughMoney(player)) {
 
-            if(!enoughMoney(player)){
-
-                break;
+                    break;
+                }
             }
-            player.eraseHands();
+            for(IPlayer player : players) {
+                player.eraseHands();
+            }
             dealer.eraseHands();
-        }while (player.wantContinue());
-        System.out.println("thx for playing.");
-
+        }while (playersIsNotEmpty());
+        System.out.println("Thx, this is end of the game.");
 
     }
-    @Override
-    public boolean enoughMoney(IPlayer IPlayer) {
-        if(player.getBank() == 0){
+
+    private boolean playersIsNotEmpty(){
+        for(IPlayer player : players){
+            if(player.wantContinue()){
+            }else {
+                System.out.println("thx for playing " + player.toString() + ".");
+                players.remove(player);
+            }
+
+        }if(players.isEmpty()){
             return false;
         }else return true;
     }
 
     @Override
+    public boolean enoughMoney(IPlayer player) {
+            if (player.getBank() == 0) {
+                return false;
+            } else return true;
+    }
+
+    @Override
     public boolean enoughCards(IDeck IDeck) {
-        return deck.getNumberOfCardsLeft() < 25;
+        return deck.getNumberOfCardsLeft() < 125;
     }
     private void newDeck(){
         deck = new Deck();
@@ -146,8 +175,23 @@ public class BlackJack implements IBlackJack {
 
     @Override
     public void showCardsToPlayer(IPlayer iPlayer) {
-        for(ICard card : player.getHand()){
-            System.out.print(card.toString());
+        for(IPlayer player : players) {
+            for (ICard card : player.getHand()) {
+                System.out.print(card.toString());
+            }
         }
     }
+
+    /*List<IPlayer> listOfPlayers(){
+        for(int i = 0; i < numberOfPlayers; i++){
+            listOfPlayers().add(player);
+        }
+        return listOfPlayers();
+    }
+
+
+    List<IPlayer> listOfBanks(){
+        for(int i = 0; i < numberOfPlayers; i++){
+        }
+    }*/
 }

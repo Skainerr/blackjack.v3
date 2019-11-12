@@ -58,8 +58,13 @@ public class UserInput implements IUserInput {
 
     @Override
     public int numberOfPlayers(){
-        System.out.println("How many players are going to play?: ");
+        System.out.println("How many players are going to play? max is 10 players: ");
         numOfPlayers = scanner.nextInt();
+        while (numOfPlayers > 10){
+            System.out.println("Sorry you can not play with that many players, maximum players is 10");
+            System.out.println("How many players are going to play? max is 10 players: ");
+            numOfPlayers = scanner.nextInt();
+        }
         return numOfPlayers;
     }
 

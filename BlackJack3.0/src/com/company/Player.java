@@ -21,6 +21,8 @@ public class Player implements IPlayer {
         }else {
             activeHand = 0;}
     }
+
+    @Override
     public void eraseHands(){
         handOne.clear();
         handTwo.clear();
@@ -95,9 +97,13 @@ public class Player implements IPlayer {
         playerBank = playerBank - bet;
         return bet;
     }
+
+    @Override
     public int getBet(){
         return bet;
     }
+
+    @Override
     public int getSplitBet(){
         splitBet = bet;
         return splitBet;
