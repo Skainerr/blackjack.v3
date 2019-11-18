@@ -3,6 +3,9 @@ package com.company;
 import java.util.List;
 
 public class Dealer extends Player {
+    public Dealer(){
+        super("Dealer");
+    }
     @Override
     public boolean wannaNextCard() {
         return getValueOfHand() < 17;

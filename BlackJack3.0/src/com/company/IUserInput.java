@@ -4,7 +4,7 @@ public interface IUserInput {
     public boolean wantNextCard();
     public int getBet();
     public boolean wantBet();
-    public boolean wantContinue();
+    public boolean wantContinue(String name);
     public boolean wantSplit();
     public int numberOfPlayers();
     public int getInitialBank();

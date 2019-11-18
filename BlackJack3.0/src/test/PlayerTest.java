@@ -25,7 +25,7 @@ class PlayerTest {
 
     @BeforeEach
     public void generatePlayer(){
-        player = new Player();
+        player = new Player("bla");
     }
 
     @Test
@@ -71,7 +71,7 @@ class PlayerTest {
     void splitHand() {
         //        Assertions.assertFalse(player.splitHand());
         System.setIn(new ByteArrayInputStream("70".getBytes()));
-        player = new Player();
+        player = new Player("bla");
         player.addToBank(333333);
         player.addCard(new Card(Card.Rank.ACE, Card.Suit.CLUBS));
         player.addCard(new Card(Card.Rank.ACE, Card.Suit.DIAMOND));
@@ -94,7 +94,7 @@ class PlayerTest {
 
         System.setIn(new ByteArrayInputStream("70".getBytes()));
 
-        player = new Player();
+        player = new Player("bla");
         player.addToBank(100);
 
         player.bet();
@@ -119,7 +119,7 @@ class PlayerTest {
 
         Assertions.assertEquals(12, player.getValueOfHand());
 
-        player = new Player();
+        player = new Player("bla");
 
         player.addCard(new Card(Card.Rank.ACE, Card.Suit.CLUBS));
         player.addCard(new Card(Card.Rank.JACK, Card.Suit.CLUBS));

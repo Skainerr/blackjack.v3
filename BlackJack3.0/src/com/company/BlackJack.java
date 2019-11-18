@@ -55,7 +55,8 @@ public class BlackJack implements IBlackJack {
         while (player.getValueOfHand() < 21){
             if(player.wannaNextCard()){
                 player.addCard(deck.drawCard());
-                showCardsToPlayer(player);
+                showHand(player);
+                System.out.println(player.getName() + " has " + player.getValueOfHand() + " on hand");
             } else {
                 break;
             }
@@ -76,16 +77,18 @@ public class BlackJack implements IBlackJack {
         newDeck();
 
         for(int i = 0; i < numberOfPlayers; i++){
-            IPlayer player = new Player();
+            String  playerName = userInput.getName();
+            IPlayer player = new Player(playerName);
             players.add(player);
         }
+
         for(IPlayer player : players){
             moneyInBank(player);
         }
 
         do{
             for(IPlayer player : players) {
-                player.getBet();
+                player.bet();
             }
             for(IPlayer player : players) {
                 player.addCard(deck.drawCard());
@@ -95,11 +98,9 @@ public class BlackJack implements IBlackJack {
                 player.addCard(deck.drawCard());
             }
             dealer.addCard(deck.drawCard());
-            for(IPlayer player : players){
-                showCardsToPlayer(player);
-            }
+            showCardsToPlayer();
             for(IPlayer player : players) {
-                System.out.println("You have " + player.getValueOfHand() + " on hand");
+                System.out.println(player.getName() + " has " + player.getValueOfHand() + " on hand");
                 if (player.splitHand()) {
                     player.getSplitBet();
                     player.addCard(deck.drawCard());
@@ -119,9 +120,10 @@ public class BlackJack implements IBlackJack {
             List<IPlayer> listOfWinners = winner();
             for(IPlayer p : listOfWinners){
                 setPricePool(p);
+                System.out.println("Congrats  " + p.getName() + " you won.");
             }
-            System.out.println();
-            System.out.println("Congrats here are Players who have won: " + listOfWinners + ".");
+
+
             for(IPlayer player : players){
                 System.out.println("Here is your bank accounts: " + player.getBank());
             }
@@ -130,12 +132,7 @@ public class BlackJack implements IBlackJack {
             if(!enoughCards(deck)){
             newDeck();
             }
-            for(IPlayer player : players) {
-                if (!enoughMoney(player)) {
 
-                    break;
-                }
-            }
             for(IPlayer player : players) {
                 player.eraseHands();
             }
@@ -146,16 +143,21 @@ public class BlackJack implements IBlackJack {
     }
 
     private boolean playersIsNotEmpty(){
+        List<IPlayer> toRemove = new ArrayList<>();
         for(IPlayer player : players){
-            if(player.wantContinue()){
+            if (!enoughMoney(player)){
+                System.out.println("thx for playing " + player.getName() + ", you do not have enough money to continue.");
+                toRemove.add(player);
             }else {
-                System.out.println("thx for playing " + player.toString() + ".");
-                players.remove(player);
+                if (!player.wantContinue()) {
+                    System.out.println("thx for playing " + player.getName() + ".");
+                    toRemove.add(player);
+                }
             }
+        }
 
-        }if(players.isEmpty()){
-            return false;
-        }else return true;
+        players.removeAll(toRemove);
+        return !players.isEmpty();
     }
 
     @Override
@@ -174,11 +176,19 @@ public class BlackJack implements IBlackJack {
     }
 
     @Override
-    public void showCardsToPlayer(IPlayer iPlayer) {
-        for(IPlayer player : players) {
-            for (ICard card : player.getHand()) {
-                System.out.print(card.toString());
-            }
+    public void showCardsToPlayer() {
+        for (IPlayer player : players) {
+                System.out.println("Player " + player.getName() + " has this cards in hand ");
+                for (ICard card : player.getHand()) {
+                    System.out.print(card.toString());
+                }
+        }
+    }
+
+    public void showHand(IPlayer player){
+        System.out.println("Player " + player.getName() + " has this cards in hand ");
+        for (ICard card : player.getHand()) {
+            System.out.print(card.toString());
         }
     }
 

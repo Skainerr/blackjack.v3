@@ -9,6 +9,7 @@ public interface IPlayer {
      * Add money into players bank
      * @param money money to add
      */
+    public String getName();
     public void addToBank(int money);
     public int getBank();
     public void addCard(ICard ICard);

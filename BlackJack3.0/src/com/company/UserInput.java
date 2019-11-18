@@ -35,8 +35,8 @@ public class UserInput implements IUserInput {
     }
 
     @Override
-    public boolean wantContinue() {
-        System.out.println("Do you want to play next game?: Y/N");
+    public boolean wantContinue(String name) {
+        System.out.println("Do you want to play next game " + name + "?: Y/N");
         String userInput = scanner.next();
         if (userInput.equals("Y") || userInput.equals("y")) {
             return true;
@@ -82,5 +82,11 @@ public class UserInput implements IUserInput {
         } else {
             return false;
         }
+    }
+
+    public String getName(){
+            System.out.println("please enter name of player: ");
+        String playerName = scanner.next();
+        return playerName;
     }
 }

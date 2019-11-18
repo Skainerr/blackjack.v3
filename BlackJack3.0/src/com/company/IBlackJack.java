@@ -12,7 +12,7 @@ public interface IBlackJack {
     public void game();
     public boolean enoughMoney(IPlayer player);
     public boolean enoughCards(IDeck IDeck);
-    public void showCardsToPlayer(IPlayer iPlayer);
+    public void showCardsToPlayer();
 
 
 }

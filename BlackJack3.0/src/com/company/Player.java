@@ -7,12 +7,23 @@ public class Player implements IPlayer {
     private int playerBank;
     private int bet;
     private int splitBet;
+    private String playerName;
     private UserInput userInput = new UserInput();
 
     //private List<List<ICard>> hand = new ArrayList<>();
     private List<ICard> handOne = new ArrayList<>();
     private List<ICard> handTwo = new ArrayList<>();
     private int activeHand = 0;
+
+    public Player(String playerName){
+        this.playerName = playerName;
+    }
+
+    @Override
+    public String getName(){
+        String getName = playerName;
+        return getName;
+    }
 
     @Override
     public void changeActiveHand(){
@@ -153,4 +164,5 @@ public class Player implements IPlayer {
         valueOfHands.add(valueOfHand);
         return valueOfHands;
     }*/
+
 }
