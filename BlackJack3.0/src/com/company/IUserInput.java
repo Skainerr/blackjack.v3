@@ -1,6 +1,6 @@
 package com.company;
 
-public interface IUserInput {
+public interface IUserInput{
     public boolean wantNextCard();
     public int getBet(String name);
     public boolean wantBet();
