@@ -12,6 +12,7 @@ public class BlackJack implements IBlackJack {
     private List<IPlayer> playersWhoWantContinue = new ArrayList<>();
 
 
+
     @Override
     public List<IPlayer> winner() {
         List<IPlayer> listOfWinners = new ArrayList<>();
@@ -37,7 +38,7 @@ public class BlackJack implements IBlackJack {
         return listOfWinners;
     }
     public void moneyInBank(IPlayer player){
-        int originalBank = userInput.getInitialBank();
+        int originalBank = userInput.getInitialBank(player.getName());
         player.addToBank(originalBank);
     }
 
@@ -49,7 +50,7 @@ public class BlackJack implements IBlackJack {
 
     @Override
     public boolean nextRound() {
-        return userInput.wantContinue();
+        return userInput.wantContinue("");
     }
     private void addNewCardIfWanted(IPlayer player){
         while (player.getValueOfHand() < 21){
@@ -125,7 +126,7 @@ public class BlackJack implements IBlackJack {
 
 
             for(IPlayer player : players){
-                System.out.println("Here is your bank accounts: " + player.getBank());
+                System.out.println(player.getName() + " here is your new bank account: " + player.getBank());
             }
 
 

@@ -17,7 +17,7 @@ class PlayerTest {
     void playerName(){
         Player p1 = new Player("Tom");
         Player p2 = new Player("Jirka");
-        BlackJack bl = new BlackJack();
+
 
         p1.addCard(new Card(Card.Rank.FOUR, Card.Suit.CLUBS));
         p2.addCard(new Card(Card.Rank.THREE, Card.Suit.CLUBS));

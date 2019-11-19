@@ -66,7 +66,7 @@ public class Player implements IPlayer {
 
     @Override
     public boolean wantContinue() {
-        return userInput.wantContinue();
+        return userInput.wantContinue(playerName);
     }
 
     @Override
@@ -95,15 +95,15 @@ public class Player implements IPlayer {
 
     @Override
     public boolean wantSplitHand() {
-        return userInput.wantSplit();
+        return userInput.wantSplit(playerName);
     }
 
     @Override
     public int bet() {
-        bet = userInput.getBet();
+        bet = userInput.getBet(playerName);
         while(bet > playerBank){
             System.out.println("Sorry you are don't have enough money, please correct your bet");
-            bet = userInput.getBet();
+            bet = userInput.getBet(playerName);
         }
         playerBank = playerBank - bet;
         return bet;

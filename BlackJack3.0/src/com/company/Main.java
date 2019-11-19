@@ -2,9 +2,10 @@ package com.company;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         IBlackJack blackJack = new BlackJack();
         blackJack.game();
+
     }
             /*Card c = new Card(Card.Rank.ACE, Card.Suit.CLUBS);
         Card c2 = new Card(Card.Rank.ACE, Card.Suit.DIAMOND);
