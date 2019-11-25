@@ -11,6 +11,7 @@ public class UserInput implements IUserInput{
     private String name;
 
 
+
     @Override
     public boolean wantNextCard() {
             System.out.println("Do you want next card?: Y/N");
@@ -33,11 +34,24 @@ public class UserInput implements IUserInput{
     @Override
     public int getBet(String name) {
         this.name = name;
+        try{
+        Scanner scannerInt = new Scanner(System.in);
         System.out.println("How much do you want to bet " + name + "?: ");
-        String userInputBet = scanner.next();
-        bet = Integer.valueOf(userInputBet);
-        return bet;
+        /*if(scannerInt.next().equals("all") || scannerInt.next().equals("ALL") || scannerInt.next().equals("All")){
+            IPlayer player = new Player(name);
+            bet = player.getBank();
+            return bet;
+        }
+
+         */
+        bet = scannerInt.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.print("Invalid number. Please enter correct bet.");
+
+            return getBet(name);
+        }return bet;
     }
+
 
     @Override
     public boolean wantBet() {
@@ -94,7 +108,6 @@ public class UserInput implements IUserInput{
                 System.out.println("Sorry you can not play with that many players, maximum players is 10");
                 System.out.println("How many players are going to play? max is 10 players: ");
                 numOfPlayers = scanner.nextInt();
-                scannerInt.close();
             }
         } catch (InputMismatchException e) {
             System.out.print("Invalid number of players. ");
@@ -110,7 +123,6 @@ public class UserInput implements IUserInput{
         try {
             Scanner scannerInt = new Scanner(System.in);
             bank = scannerInt.nextInt();
-            scannerInt.close();
         } catch (InputMismatchException e) {
             System.out.print("Could not read the amount, please enter numbers: ");
 
