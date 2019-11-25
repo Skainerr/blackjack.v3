@@ -1,29 +1,31 @@
 package com.company;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UserInput implements IUserInput{
     private Scanner scanner = new Scanner(System.in);
-    private int numOfPlayers;
+    private int numOfPlayers = 0;
     private int bank;
     private int bet;
     private String name;
+
 
     @Override
     public boolean wantNextCard() {
             System.out.println("Do you want next card?: Y/N");
             String userInput = scanner.next();
             userInput = userInput.toUpperCase();
-            while(!userInput.equals("N") || userInput.equals("Y")){
-                System.out.println("Do you want next card?: Y/N");
-                userInput = scanner.next();
-                userInput = userInput.toUpperCase();
-            }
-                if(userInput.equals("Y")) {
-                    return true;
-                } else {
-                    return false;
-                }
+            while(!userInput.equals("N") && !userInput.equals("Y")){
+            System.out.println("Please enter just Y/N, thank you.");
+            userInput = scanner.next();
+            userInput = userInput.toUpperCase();
+        }
+        if(userInput.equals("Y")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -32,7 +34,8 @@ public class UserInput implements IUserInput{
     public int getBet(String name) {
         this.name = name;
         System.out.println("How much do you want to bet " + name + "?: ");
-        bet = scanner.nextInt();
+        String userInputBet = scanner.next();
+        bet = Integer.valueOf(userInputBet);
         return bet;
     }
 
@@ -49,7 +52,13 @@ public class UserInput implements IUserInput{
         this.name = name;
         System.out.println("Do you want to play next game " + name + "?: Y/N");
         String userInput = scanner.next();
-        if (userInput.equals("Y") || userInput.equals("y")) {
+        userInput = userInput.toUpperCase();
+        while(!userInput.equals("N") && !userInput.equals("Y")){
+            System.out.println("Please enter just Y/N, thank you.");
+            userInput = scanner.next();
+            userInput = userInput.toUpperCase();
+        }
+        if(userInput.equals("Y")) {
             return true;
         } else {
             return false;
@@ -62,7 +71,13 @@ public class UserInput implements IUserInput{
         this.name = name;
         System.out.println("Do you want to split your hand " + name + "?: Y/N");
         String userInput = scanner.next();
-        if (userInput.equals("Y") || userInput.equals("y")) {
+        userInput = userInput.toUpperCase();
+        while(!userInput.equals("N") && !userInput.equals("Y")){
+            System.out.println("Please enter just Y/N, thank you.");
+            userInput = scanner.next();
+            userInput = userInput.toUpperCase();
+        }
+        if(userInput.equals("Y")) {
             return true;
         } else {
             return false;
@@ -72,21 +87,35 @@ public class UserInput implements IUserInput{
     @Override
     public int numberOfPlayers() {
         System.out.println("How many players are going to play? max is 10 players: ");
-        numOfPlayers = scanner.nextInt();
-        while (numOfPlayers > 10){
-            System.out.println("Sorry you can not play with that many players, maximum players is 10");
-            System.out.println("How many players are going to play? max is 10 players: ");
-            numOfPlayers = scanner.nextInt();
-        }
-        return numOfPlayers;
+        try {
+            Scanner scannerInt = new Scanner(System.in);
+                numOfPlayers = scannerInt.nextInt();
+            while (numOfPlayers > 10) {
+                System.out.println("Sorry you can not play with that many players, maximum players is 10");
+                System.out.println("How many players are going to play? max is 10 players: ");
+                numOfPlayers = scanner.nextInt();
+                scannerInt.close();
+            }
+        } catch (InputMismatchException e) {
+            System.out.print("Invalid number of players. ");
+
+            return numberOfPlayers();
+        }return numOfPlayers;
     }
 
     @Override
     public int getInitialBank(String name) {
         this.name = name;
         System.out.println("How much money you want to put in " + name + "?: ");
-        bank = scanner.nextInt();
-        return bank;
+        try {
+            Scanner scannerInt = new Scanner(System.in);
+            bank = scannerInt.nextInt();
+            scannerInt.close();
+        } catch (InputMismatchException e) {
+            System.out.print("Could not read the amount, please enter numbers: ");
+
+            return getInitialBank(name);
+        }return bank;
     }
    /* maybe will add later
    public boolean wannaRaiseBank() {

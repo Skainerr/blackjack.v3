@@ -52,6 +52,7 @@ public class BlackJack implements IBlackJack {
     public boolean nextRound() {
         return userInput.wantContinue("");
     }
+
     private void addNewCardIfWanted(IPlayer player){
         while (player.getValueOfHand() < 21){
             if(player.wannaNextCard()){
@@ -105,9 +106,11 @@ public class BlackJack implements IBlackJack {
                 if (player.splitHand()) {
                     player.getSplitBet();
                     player.addCard(deck.drawCard());
+                    showCardsToPlayer();
                     addNewCardIfWanted(player);
                     player.changeActiveHand();
                     player.addCard(deck.drawCard());
+                    showCardsToPlayer();
                     addNewCardIfWanted(player);
                     player.changeActiveHand();
                 } else {

@@ -72,10 +72,11 @@ public class Player implements IPlayer {
     @Override
     public boolean splitHand() {
         if((acesOnHand() == 2 || splittable())
-        && playerBank >= bet()){
+        && playerBank >= bet){
             if(wantSplitHand()){
                 handTwo.add(handOne.remove(0));
-            }
+                return true;
+            }else{return false;}
         }
         return false;
     }
@@ -116,7 +117,7 @@ public class Player implements IPlayer {
 
     @Override
     public int getSplitBet(){
-        splitBet = bet;
+        splitBet = this.bet;
         return splitBet;
     }
 
